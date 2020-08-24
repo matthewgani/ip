@@ -11,7 +11,7 @@ public class Duke {
                 + "|____/ \\__,_|_|\\_\\___|\n";
 
         printDividerLine();
-        System.out.println("Hello! I'm Duke \n " + logo);
+        System.out.println("Hello! I'm Duke! \n " + logo);
         System.out.println("What can I do for you?");
         printDividerLine();
 
@@ -20,35 +20,37 @@ public class Duke {
     public static void printDividerLine() {
         System.out.println("___________________________________ \n");
     }
+
     public static void printGoodbye() {
         printDividerLine();
-        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println("Bye. Hope to see you again soon! :)");
         printDividerLine();
     }
+
+
     public static void main(String[] args) {
         Scanner userResponseScanner = new Scanner(System.in);
         boolean quitResponseLoop = false;
-        printWelcome();
         String userResponse;
+        String[] taskList = new String[100];
+        printWelcome();
+
         while(!quitResponseLoop) {
             userResponse = userResponseScanner.nextLine();
-            if(!userResponse.equals("bye")) {
-                printDividerLine();
-                System.out.println(userResponse);
-                printDividerLine();
 
-            }
-            else {
+            if (userResponse.equals("bye")) {
                 printGoodbye();
                 quitResponseLoop = true;
+
+            } else if (userResponse.equals("list")) {
+                TaskHelper.printTaskList(taskList);
+
+            } else {
+                TaskHelper.addTaskToList(userResponse, taskList);
+
             }
 
         }
-
-
-
-
-
 
     }
 }
