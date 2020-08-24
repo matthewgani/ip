@@ -5,25 +5,19 @@ public class TaskHelper {
 
     }
 
-    public static void addTaskToList(String taskDescription, String[] taskList) {
+    public static void addTaskToList(String taskDescription, Task[] taskList) {
         printDividerLine();
         System.out.println("added: " + taskDescription);
-        Task task = new Task(taskDescription);
-        taskList[Task.getNumberOfTasks() - 1] = task.getTaskDescription();
+        Task currentTask = new Task(taskDescription);
+        taskList[Task.getNumberOfTasks() - 1] = currentTask;
         printDividerLine();
     }
 
-    public static void printTaskList(String[] taskList) {
+    public static void printTaskList(Task[] taskList) {
         int taskCount = 0;
         printDividerLine();
-        for (String taskDescription : taskList) {
-            if(taskDescription != null) {
-                System.out.println(taskCount + 1 + ". " + taskDescription);
-                taskCount++;
-            } else {
-                // this occurs when it reaches a null String in taskList
-                break;
-            }
+        for (taskCount = 0; taskCount < Task.getNumberOfTasks(); taskCount++ ) {
+            System.out.println(taskCount + 1 + ". " + taskList[taskCount].getTaskDescription());
 
         }
         printDividerLine();

@@ -32,7 +32,7 @@ public class Duke {
         Scanner userResponseScanner = new Scanner(System.in);
         boolean quitResponseLoop = false;
         String userResponse;
-        String[] taskList = new String[100];
+        Task[] taskList = new Task[100];
         printWelcome();
 
         while(!quitResponseLoop) {
