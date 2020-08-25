@@ -15,8 +15,8 @@ public class Duke {
         System.out.println("What can I do for you?");
         printDividerLine();
 
-
     }
+
     public static void printDividerLine() {
         System.out.println("___________________________________ \n");
     }
@@ -33,10 +33,12 @@ public class Duke {
         boolean quitResponseLoop = false;
         String userResponse;
         Task[] taskList = new Task[100];
+
+
         printWelcome();
 
-        while(!quitResponseLoop) {
-            userResponse = userResponseScanner.nextLine();
+        while (!quitResponseLoop) {
+            userResponse = userResponseScanner.nextLine().trim();
 
             if (userResponse.equals("bye")) {
                 printGoodbye();
@@ -44,6 +46,9 @@ public class Duke {
 
             } else if (userResponse.equals("list")) {
                 TaskHelper.printTaskList(taskList);
+
+            } else if (userResponse.contains("done")) {
+                TaskHelper.setTaskAsDone(userResponse, taskList);
 
             } else {
                 TaskHelper.addTaskToList(userResponse, taskList);
