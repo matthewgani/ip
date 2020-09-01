@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Duke {
@@ -32,26 +33,30 @@ public class Duke {
         Scanner userResponseScanner = new Scanner(System.in);
         boolean quitResponseLoop = false;
         String userResponse;
-        Task[] taskList = new Task[100];
-
+        ArrayList<Task> taskList = new ArrayList<>();
 
         printWelcome();
 
         while (!quitResponseLoop) {
             userResponse = userResponseScanner.nextLine().trim();
+            String[] splitUserResponse = userResponse.split(" ", 2);
+            String command = splitUserResponse[0];
 
-            if (userResponse.equals("bye")) {
+            if (command.equals("bye")) {
                 printGoodbye();
                 quitResponseLoop = true;
 
-            } else if (userResponse.equals("list")) {
+            } else if (command.equals("list")) {
                 TaskHelper.printTaskList(taskList);
 
-            } else if (userResponse.contains("done")) {
-                TaskHelper.setTaskAsDone(userResponse, taskList);
+            } else if (command.equals("done")) {
+                int taskNumber = Integer.parseInt(splitUserResponse[1]);
+                // Need to check for error when parseInt
 
+                TaskHelper.setTaskAsDone(taskNumber, taskList);
             } else {
-                TaskHelper.addTaskToList(userResponse, taskList);
+                String taskDetails = splitUserResponse[1];
+                TaskHelper.addTaskToList(command, taskDetails, taskList);
 
             }
 

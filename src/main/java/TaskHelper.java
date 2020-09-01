@@ -1,5 +1,4 @@
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 public class TaskHelper {
 
@@ -8,22 +7,46 @@ public class TaskHelper {
 
     }
 
-    public static void addTaskToList(String taskDescription, Task[] taskList) {
+    public static void addTaskToList(String taskType, String taskDetails, ArrayList<Task> taskList) {
         printDividerLine();
-        System.out.println("added: " + taskDescription);
-        Task currentTask = new Task(taskDescription);
-        taskList[Task.getNumberOfTasks() - 1] = currentTask;
+        System.out.println("Got it. I've added this task: ");
+        switch(taskType) {
+        case "todo":
+            Task newToDo = new ToDo(taskDetails);
+            taskList.add(newToDo);
+            System.out.println(newToDo.toString());
+            break;
+        case "deadline":
+            String[] deadlineDetails = taskDetails.split("/by", 2);
+            String deadlineDescription = deadlineDetails[0].trim();
+            String deadlineBy = deadlineDetails[1].trim();
+            Task newDeadline = new Deadline(deadlineDescription, deadlineBy);
+            taskList.add(newDeadline);
+            System.out.println(newDeadline.toString());
+            break;
+        case "event":
+            String[] eventDetails = taskDetails.split("/at", 2);
+            String eventDescription = eventDetails[0].trim();
+            String eventAt = eventDetails[1].trim();
+            Task newEvent = new Event(eventDescription, eventAt);
+            taskList.add(newEvent);
+            System.out.println(newEvent.toString());
+            break;
+        }
+        if (Task.getNumberOfTasks() > 1) {
+            System.out.println("Now you have " + Task.getNumberOfTasks() + " tasks in the list.");
+        } else {
+            System.out.println("Now you have " + Task.getNumberOfTasks() + " task in the list.");
+        }
         printDividerLine();
     }
 
-    public static void printTaskList(Task[] taskList) {
-        int taskCount = 0;
+    public static void printTaskList(ArrayList<Task> taskList) {
+        int taskCount;
         printDividerLine();
         System.out.println("Here are the tasks in your list:");
-        for (taskCount = 0; taskCount < Task.getNumberOfTasks(); taskCount++ ) {
-            System.out.println(taskCount + 1 + ".[" + taskList[taskCount].getStatusIcon()
-                    + "] " + taskList[taskCount].getDescription());
-
+        for (taskCount = 0; taskCount < Task.getNumberOfTasks(); taskCount++) {
+            System.out.println(taskCount + 1 + ". " + taskList.get(taskCount).toString());
         }
         printDividerLine();
 
@@ -32,42 +55,23 @@ public class TaskHelper {
     public static void printTaskDone(Task currentTask) {
         printDividerLine();
         System.out.println("Nice! I've marked this task as done:");
-        System.out.println("[" + currentTask.getStatusIcon() + "]" + " " + currentTask.getDescription());
+        System.out.println(currentTask.toString());
         printDividerLine();
-
     }
 
     private static void printDividerLine() {
         System.out.println("___________________________________ \n");
     }
 
-    public static void setTaskAsDone(String userResponse, Task[] taskList) {
+    public static void setTaskAsDone(int taskNumber, ArrayList<Task> taskList) {
 
-        Pattern donePattern = Pattern.compile("\\b(done)[\\h]\\d");
-        Matcher doneMatcher = donePattern.matcher(userResponse);
-
-        if (doneMatcher.find()) {
-            // if userResponse contains "done  x", where x is positive integer
-
-            String[] splitDoneResponse = doneMatcher.group(0).split(" ");
-            int taskNumber = Integer.parseInt(splitDoneResponse[1]);
-            if (taskNumber <= Task.getNumberOfTasks() && taskNumber > 0) {
-                // splitDoneResponse[1] should be a integer
-                // we check if it is a valid task number to mark as done
-                Task currentTask = taskList[taskNumber - 1];
-                currentTask.markAsDone();
-                TaskHelper.printTaskDone(currentTask);
-
-
-            } else {
-                printDividerLine();
-                System.out.println("Invalid task number to mark as done!");
-                printDividerLine();
-            }
-
+        if(taskNumber <= Task.getNumberOfTasks() && taskNumber > 0) {
+            Task currentTask = taskList.get(taskNumber - 1);
+            currentTask.markAsDone();
+            TaskHelper.printTaskDone(currentTask);
         } else {
             printDividerLine();
-            System.out.println("No task number detected!");
+            System.out.println("Invalid task number to mark as done!");
             printDividerLine();
         }
 
