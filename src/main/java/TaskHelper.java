@@ -12,9 +12,9 @@ public class TaskHelper {
         System.out.println("Got it. I've added this task: ");
         switch(taskType) {
         case "todo":
-            Task newToDo = new ToDo(taskDetails);
-            taskList.add(newToDo);
-            System.out.println(newToDo.toString());
+            Task newTodo = new Todo(taskDetails);
+            taskList.add(newTodo);
+            System.out.println(newTodo.toString());
             break;
         case "deadline":
             String[] deadlineDetails = taskDetails.split("/by", 2);
