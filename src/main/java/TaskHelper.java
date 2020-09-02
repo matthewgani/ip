@@ -52,28 +52,28 @@ public class TaskHelper {
 
     }
 
-    public static void printTaskDone(Task currentTask) {
-        printDividerLine();
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println(currentTask.toString());
-        printDividerLine();
-    }
-
     private static void printDividerLine() {
         System.out.println("___________________________________ \n");
     }
 
     public static void setTaskAsDone(int taskNumber, ArrayList<Task> taskList) {
-
+        printDividerLine();
         if(taskNumber <= Task.getNumberOfTasks() && taskNumber > 0) {
             Task currentTask = taskList.get(taskNumber - 1);
             currentTask.markAsDone();
-            TaskHelper.printTaskDone(currentTask);
+            System.out.println("Nice! I've marked this task as done:");
+            System.out.println(currentTask.toString());
         } else {
-            printDividerLine();
             System.out.println("Invalid task number to mark as done!");
-            printDividerLine();
         }
+        printDividerLine();
+
+    }
+
+    public static void printDoneErrorMessage() {
+        printDividerLine();
+        System.out.println("No task to set as done!");
+        printDividerLine();
 
     }
 

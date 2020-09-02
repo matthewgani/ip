@@ -32,15 +32,21 @@ public class Duke {
     public static void main(String[] args) {
         Scanner userResponseScanner = new Scanner(System.in);
         boolean quitResponseLoop = false;
-        String userResponse;
+        //String userResponse;
+        String command;
+        String commandDetails = null;
         ArrayList<Task> taskList = new ArrayList<>();
 
         printWelcome();
 
         while (!quitResponseLoop) {
-            userResponse = userResponseScanner.nextLine().trim();
-            String[] splitUserResponse = userResponse.split(" ", 2);
-            String command = splitUserResponse[0];
+            command = userResponseScanner.nextLine().trim();
+
+            if(command.contains(" ")) {
+                String[] splitUserResponse = command.split(" ", 2);
+                command = splitUserResponse[0];
+                commandDetails = splitUserResponse[1];
+            }
 
             if (command.equals("bye")) {
                 printGoodbye();
@@ -50,12 +56,16 @@ public class Duke {
                 TaskHelper.printTaskList(taskList);
 
             } else if (command.equals("done")) {
-                int taskNumber = Integer.parseInt(splitUserResponse[1]);
-                // Need to check for error when parseInt
+                if (commandDetails != null) {
+                    int taskNumber = Integer.parseInt(commandDetails);
+                    // Undone: Check for error when parseInt
 
-                TaskHelper.setTaskAsDone(taskNumber, taskList);
+                    TaskHelper.setTaskAsDone(taskNumber, taskList);
+                } else {
+                    TaskHelper.printDoneErrorMessage();
+                }
             } else {
-                String taskDetails = splitUserResponse[1];
+                String taskDetails = commandDetails;
                 TaskHelper.addTaskToList(command, taskDetails, taskList);
 
             }
