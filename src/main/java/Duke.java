@@ -3,6 +3,13 @@ import java.util.Scanner;
 
 public class Duke {
 
+    public static void main(String[] args) {
+        ArrayList<Task> taskList = new ArrayList<>();
+        printWelcome();
+        runDuke(taskList);
+        printGoodbye();
+
+    }
 
     public static void printWelcome() {
         String logo = " ____        _        \n"
@@ -28,49 +35,39 @@ public class Duke {
         printDividerLine();
     }
 
-
-    public static void main(String[] args) {
+    public static void runDuke(ArrayList<Task> taskList){
         Scanner userResponseScanner = new Scanner(System.in);
-        boolean quitResponseLoop = false;
-        //String userResponse;
         String command;
-        String commandDetails = null;
-        ArrayList<Task> taskList = new ArrayList<>();
-
-        printWelcome();
+        boolean quitResponseLoop = false;
 
         while (!quitResponseLoop) {
             command = userResponseScanner.nextLine().trim();
 
-            if(command.contains(" ")) {
-                String[] splitUserResponse = command.split(" ", 2);
-                command = splitUserResponse[0];
-                commandDetails = splitUserResponse[1];
-            }
-
-            if (command.equals("bye")) {
-                printGoodbye();
+            if(command.equals("bye")) {
                 quitResponseLoop = true;
-
             } else if (command.equals("list")) {
                 TaskHelper.printTaskList(taskList);
-
-            } else if (command.equals("done")) {
-                if (commandDetails != null) {
-                    int taskNumber = Integer.parseInt(commandDetails);
-                    // Undone: Check for error when parseInt
-
+            } else if (command.startsWith("done")) {
+                try {
+                    int taskNumber = TaskHelper.getTaskNumberToSetAsDone(command);
                     TaskHelper.setTaskAsDone(taskNumber, taskList);
-                } else {
-                    TaskHelper.printDoneErrorMessage();
+                } catch (NumberFormatException e) {
+                    TaskHelper.
+                    System.out.println("Unable to obtain task number!");
+                }
+            } else if (command.startsWith("todo") || command.startsWith("deadline") || command.startsWith("event")) {
+                try {
+                    String[] taskCommand = TaskHelper.splitTaskCommand(command);
+                    TaskHelper.addTaskToList(taskCommand, taskList);
+                } catch (DukeException e) {
+                    System.out.println(e);
                 }
             } else {
-                String taskDetails = commandDetails;
-                TaskHelper.addTaskToList(command, taskDetails, taskList);
-
+                TaskHelper.printInvalidCommand();
             }
 
         }
-
     }
+
+
 }

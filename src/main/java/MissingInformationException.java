@@ -1,4 +1,16 @@
-package PACKAGE_NAME;
+public class MissingInformationException extends DukeException {
 
-public class MissingInformationException {
+    private String exceptionMessage;
+
+
+    public MissingInformationException(String exceptionMessage) {
+        this.exceptionMessage = exceptionMessage;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Oh no! " + exceptionMessage;
+    }
+
 }
