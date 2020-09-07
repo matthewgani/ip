@@ -6,37 +6,43 @@ public class TaskHelper {
     public TaskHelper() {
     }
 
-    public static void printTaskNumberMessage() {
-        if (Task.getNumberOfTasks() > 1) {
-            System.out.println("Now you have " + Task.getNumberOfTasks() + " tasks in the list.");
-        } else {
-            System.out.println("Now you have " + Task.getNumberOfTasks() + " task in the list.");
-        }
-    }
-
     public static void addTodo(String taskDetails, ArrayList<Task> taskList) {
         Task newTodo = new Todo(taskDetails);
         taskList.add(newTodo);
+        printDividerLine();
+        System.out.println("Got it! I've added this todo: ");
         System.out.println(newTodo);
+        printDividerLine();
     }
 
-    public static void addDeadline(String taskDetails, ArrayList<Task> taskList) {
+    public static void addDeadline(String taskDetails, ArrayList<Task> taskList) throws MissingInformationException {
         String[] deadlineDetails = taskDetails.split("/by", 2);
+        if(deadlineDetails.length < 2) {
+            throw new MissingInformationException("The deadline 'by' date/time was undetected!");
+        }
         String deadlineDescription = deadlineDetails[0].trim();
         String deadlineBy = deadlineDetails[1].trim();
         Task newDeadline = new Deadline(deadlineDescription, deadlineBy);
         taskList.add(newDeadline);
+        printDividerLine();
+        System.out.println("Got it! I've added this deadline: ");
         System.out.println(newDeadline);
+        printDividerLine();
     }
 
-    public static void addEvent(String taskDetails, ArrayList<Task> taskList) {
+    public static void addEvent(String taskDetails, ArrayList<Task> taskList) throws MissingInformationException{
         String[] eventDetails = taskDetails.split("/at", 2);
-        // try catch for at
+        if(eventDetails.length < 2) {
+            throw new MissingInformationException("The event 'at' date/time was undetected!");
+        }
         String eventDescription = eventDetails[0].trim();
         String eventAt = eventDetails[1].trim();
         Task newEvent = new Event(eventDescription, eventAt);
         taskList.add(newEvent);
+        printDividerLine();
+        System.out.println("Got it! I've added this event: ");
         System.out.println(newEvent);
+        printDividerLine();
     }
 
     public static void addTaskToList(String[] taskCommand, ArrayList<Task> taskList) throws MissingInformationException {
@@ -46,22 +52,27 @@ public class TaskHelper {
 
         String taskType = taskCommand[0];
         String taskDetails = taskCommand[1];
-        printDividerLine();
 
-        System.out.println("Got it! I've added this task: ");
         switch(taskType) {
         case "todo":
             addTodo(taskDetails, taskList);
             break;
         case "deadline":
-            addDeadline(taskDetails, taskList);
+            try {
+                addDeadline(taskDetails, taskList);
+            } catch (MissingInformationException e) {
+                printExceptionMessage(e.toString());
+            }
             break;
         case "event":
-            addEvent(taskDetails, taskList);
+            try {
+                addEvent(taskDetails, taskList);
+            } catch (MissingInformationException e) {
+                printExceptionMessage(e.toString());
+            }
             break;
         }
         printTaskNumberMessage();
-        printDividerLine();
     }
 
     public static void printTaskList(ArrayList<Task> taskList) {
@@ -77,10 +88,6 @@ public class TaskHelper {
         }
         printDividerLine();
 
-    }
-
-    private static void printDividerLine() {
-        System.out.println("___________________________________ \n");
     }
 
     public static void setTaskAsDone(int taskNumber, ArrayList<Task> taskList) {
@@ -114,5 +121,33 @@ public class TaskHelper {
         System.out.println("Sorry, I could not understand your command!");
         printDividerLine();
     }
+
+    public static void printTaskNumberParseError() {
+        printDividerLine();
+        System.out.println("Unable to obtain task number!");
+        printDividerLine();
+    }
+
+    public static void printTaskNumberNotFound() {
+        printDividerLine();
+        System.out.println("No task number detected!");
+        printDividerLine();
+    }
+
+    public static void printTaskNumberMessage() {
+        System.out.println("Now you have " + Task.getNumberOfTasks() + " task(s) in your list!");
+        printDividerLine();
+    }
+
+    public static void printExceptionMessage(String exceptionMessage) {
+        printDividerLine();
+        System.out.println(exceptionMessage);
+        printDividerLine();
+    }
+
+    private static void printDividerLine() {
+        System.out.println("___________________________________ \n");
+    }
+
 
 }

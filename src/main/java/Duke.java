@@ -52,22 +52,21 @@ public class Duke {
                     int taskNumber = TaskHelper.getTaskNumberToSetAsDone(command);
                     TaskHelper.setTaskAsDone(taskNumber, taskList);
                 } catch (NumberFormatException e) {
-                    TaskHelper.
-                    System.out.println("Unable to obtain task number!");
+                    TaskHelper.printTaskNumberParseError();
+                } catch (IndexOutOfBoundsException e) {
+                    TaskHelper.printTaskNumberNotFound();
                 }
             } else if (command.startsWith("todo") || command.startsWith("deadline") || command.startsWith("event")) {
                 try {
                     String[] taskCommand = TaskHelper.splitTaskCommand(command);
                     TaskHelper.addTaskToList(taskCommand, taskList);
                 } catch (DukeException e) {
-                    System.out.println(e);
+                    TaskHelper.printExceptionMessage(e.toString());
                 }
             } else {
                 TaskHelper.printInvalidCommand();
             }
-
         }
     }
-
 
 }
