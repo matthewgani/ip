@@ -49,7 +49,7 @@ public class Duke {
                 TaskHelper.printTaskList(taskList);
             } else if (command.startsWith("done")) {
                 try {
-                    int taskNumber = TaskHelper.getTaskNumberToSetAsDone(command);
+                    int taskNumber = TaskHelper.getTaskNumberFromCommand(command);
                     TaskHelper.setTaskAsDone(taskNumber, taskList);
                 } catch (NumberFormatException e) {
                     TaskHelper.printTaskNumberParseError();
@@ -62,6 +62,15 @@ public class Duke {
                     TaskHelper.addTaskToList(taskCommand, taskList);
                 } catch (DukeException e) {
                     TaskHelper.printExceptionMessage(e.toString());
+                }
+            } else if (command.startsWith("delete")) {
+                try {
+                    int taskNumber = TaskHelper.getTaskNumberFromCommand(command);
+                    TaskHelper.deleteTask(taskNumber, taskList);
+                } catch (NumberFormatException e) {
+                    TaskHelper.printTaskNumberParseError();
+                } catch (IndexOutOfBoundsException e) {
+                    TaskHelper.printTaskNumberNotFound();
                 }
             } else {
                 TaskHelper.printInvalidCommand();

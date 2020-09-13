@@ -49,10 +49,8 @@ public class TaskHelper {
         if(taskCommand.length < 2) {
             throw new MissingInformationException("The details of a " + taskCommand[0] + " cannot be empty!");
         }
-
         String taskType = taskCommand[0];
         String taskDetails = taskCommand[1];
-
         switch(taskType) {
         case "todo":
             addTodo(taskDetails, taskList);
@@ -73,6 +71,7 @@ public class TaskHelper {
             break;
         }
         printTaskNumberMessage();
+        printDividerLine();
     }
 
     public static void printTaskList(ArrayList<Task> taskList) {
@@ -104,12 +103,29 @@ public class TaskHelper {
 
     }
 
-    public static int getTaskNumberToSetAsDone(String command) {
+    public static void deleteTask(int taskNumber, ArrayList<Task> taskList) {
+        printDividerLine();
+        if(taskNumber <= Task.getNumberOfTasks() && taskNumber > 0) {
+            Task currentTask = taskList.get(taskNumber - 1);
+            taskList.remove(taskNumber - 1);
+            Task.decreaseNumberOfTasks();
+            System.out.println("Got it! I've deleted this task:");
+            System.out.println(currentTask);
+        } else {
+            System.out.println("Invalid task number to delete!");
+        }
+        printTaskNumberMessage();
+        printDividerLine();
+    }
+
+    public static int getTaskNumberFromCommand(String command) {
         int taskNumber;
         String[] splitCommand = command.split(" ", 2);
         taskNumber = Integer.parseInt(splitCommand[1]);
         return taskNumber;
     }
+
+
 
     public static String[] splitTaskCommand(String command) {
         String[] splitCommand = command.split(" ", 2);
@@ -136,7 +152,6 @@ public class TaskHelper {
 
     public static void printTaskNumberMessage() {
         System.out.println("Now you have " + Task.getNumberOfTasks() + " task(s) in your list!");
-        printDividerLine();
     }
 
     public static void printExceptionMessage(String exceptionMessage) {

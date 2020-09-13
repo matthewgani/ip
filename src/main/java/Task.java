@@ -30,11 +30,12 @@ public class Task {
         this.isDone = true;
     }
 
+    public static void decreaseNumberOfTasks() {
+        numberOfTasks--;
+    }
+
     @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + getDescription();
     }
-
-
-
 }
