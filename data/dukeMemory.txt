@@ -1,0 +1,3 @@
+todo | 0 | cs2133t homework
+deadline | 0 | run | 4pm tomorrow
+event | 1 | jump hurdles | 6pm

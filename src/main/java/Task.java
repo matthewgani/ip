@@ -3,6 +3,7 @@ public class Task {
     private String description;
     private static int numberOfTasks = 0;
     protected boolean isDone;
+    protected String taskType;
 
     public Task(String description) {
         setDescription(description);
@@ -30,9 +31,17 @@ public class Task {
         this.isDone = true;
     }
 
+    public Boolean getDoneStatus() {
+        return isDone;
+    }
+
     @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + getDescription();
+    }
+
+    public String getTaskType() {
+        return taskType;
     }
 
 
