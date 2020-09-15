@@ -4,11 +4,7 @@ import java.util.Scanner;
 public class Duke {
 
     public static void main(String[] args) {
-        ArrayList<Task> taskList = new ArrayList<>();
-        printWelcome();
-        runDuke(taskList);
-        printGoodbye();
-
+        runDuke();
     }
 
     public static void printWelcome() {
@@ -35,15 +31,24 @@ public class Duke {
         printDividerLine();
     }
 
-    public static void runDuke(ArrayList<Task> taskList){
+    public static ArrayList<Task> loadDukeMemory() {
+        printDividerLine();
+        ArrayList<Task> taskList = FileHelper.retrieveData();
+        TaskHelper.printTaskNumberMessage();
+        return taskList;
+    }
+
+    public static void runDuke(){
         Scanner userResponseScanner = new Scanner(System.in);
         String command;
         boolean quitResponseLoop = false;
+        ArrayList<Task> taskList = loadDukeMemory();
+        printWelcome();
 
         while (!quitResponseLoop) {
             command = userResponseScanner.nextLine().trim();
 
-            if(command.equals("bye")) {
+            if (command.equals("bye")) {
                 quitResponseLoop = true;
             } else if (command.equals("list")) {
                 TaskHelper.printTaskList(taskList);
@@ -59,7 +64,7 @@ public class Duke {
             } else if (command.startsWith("todo") || command.startsWith("deadline") || command.startsWith("event")) {
                 try {
                     String[] taskCommand = TaskHelper.splitTaskCommand(command);
-                    TaskHelper.addTaskToList(taskCommand, taskList);
+                    TaskHelper.addTaskToList(taskCommand, taskList, false);
                 } catch (DukeException e) {
                     TaskHelper.printExceptionMessage(e.toString());
                 }
@@ -76,6 +81,10 @@ public class Duke {
                 TaskHelper.printInvalidCommand();
             }
         }
+
+        FileHelper.convertTaskListToFile("data/dukeMemory.txt", taskList);
+        printGoodbye();
+
     }
 
 }
