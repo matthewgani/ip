@@ -8,9 +8,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class FileHelper {
+public class Storage {
 
-    public static ArrayList<Task> retrieveData() {
+    public static void retrieveData() {
         ArrayList<String> fileData = new ArrayList<>();
         ArrayList<Task> taskList = new ArrayList<>();
 
@@ -23,38 +23,19 @@ public class FileHelper {
             while (fileScanner.hasNext()) {
                 fileData.add(fileScanner.nextLine());
             }
-            taskList = convertFileToTaskList(fileData);
+            convertFileToTaskList(fileData);
 
         } catch (IOException e) {
-            printFileScannerIOError();
-            resetTaskList(taskList);
+            Ui.printFileScannerIOError();
+            TaskList.resetTaskList(taskList);
         } catch (ArrayIndexOutOfBoundsException e) {
-            printReadError();
-            resetTaskList(taskList);
+            Ui.printReadError();
+            TaskList.resetTaskList(taskList);
         } catch (DukeException e) {
-            TaskHelper.printExceptionMessage(e.toString());
-            resetTaskList(taskList);
+            Ui.printExceptionMessage(e.toString());
+            TaskList.resetTaskList(taskList);
         }
 
-        return taskList;
-
-    }
-
-    public static void resetTaskList(ArrayList<Task> taskList) {
-        taskList.clear();
-        Task.resetNumberOfTasks();
-    }
-
-    public static void printFileScannerIOError() {
-        Duke.printDividerLine();
-        System.out.println("Unable to find dukeMemory file!");
-        Duke.printDividerLine();
-    }
-
-    public static void printReadError() {
-        Duke.printDividerLine();
-        System.out.println("Problems with reading file!");
-        Duke.printDividerLine();
     }
 
     public static void manageDataDirectory() {
@@ -81,8 +62,9 @@ public class FileHelper {
         }
     }
 
-    public static void convertTaskListToFile(String filePath, ArrayList<Task> taskList) {
+    public static void saveDukeMemory(String filePath) {
         try {
+            ArrayList<Task> taskList = TaskList.getTaskList();
             FileWriter fw = new FileWriter(filePath);
             for (Task task : taskList) {
                 fw.write(formatTaskForFileWrite(task));
@@ -124,9 +106,7 @@ public class FileHelper {
     }
 
 
-    public static ArrayList<Task> convertFileToTaskList(ArrayList<String> fileData) throws ArrayIndexOutOfBoundsException, CorruptedFileException {
-        ArrayList<Task> taskList = new ArrayList<>();
-
+    public static void convertFileToTaskList(ArrayList<String> fileData) throws ArrayIndexOutOfBoundsException, CorruptedFileException {
         for (String taskData : fileData) {
             Boolean taskDoneStatus;
             int taskDoneInt;
@@ -161,19 +141,22 @@ public class FileHelper {
             }
 
             try {
-                TaskHelper.addTaskToList(taskDetails, taskList, true);
+                TaskList.addTaskToList(taskDetails);
                 if (taskDoneStatus) {
-                    // set the latest task added as done
-                    taskList.get(taskList.size() - 1).markAsDone();
+                    TaskList.getTaskList().get(Task.getNumberOfTasks() - 1).markAsDone();
                 }
             } catch (DukeException e) {
-                TaskHelper.printExceptionMessage(e.toString());
+                Ui.printExceptionMessage(e.toString());
             }
-
         }
-
-        return taskList;
     }
 
 
+    public static void loadDukeMemory() {
+        Ui.printDividerLine();
+        TaskList.setIsLoadingFromFile(true);
+        Storage.retrieveData();
+        Ui.printTaskNumberMessage();
+        TaskList.setIsLoadingFromFile(false);
+    }
 }

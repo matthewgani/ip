@@ -1,19 +1,35 @@
 import java.util.ArrayList;
 
-public class TaskHelper {
+public class TaskList {
+    private static ArrayList<Task> taskList;
+    private static Boolean isLoadingFromFile;
 
-    public static void addTodo(String taskDetails, ArrayList<Task> taskList, Boolean isLoadingFromFile) {
+    public TaskList () {
+        TaskList.taskList = new ArrayList<>();
+    }
+
+    public static void setIsLoadingFromFile(Boolean booleanValue) {
+        TaskList.isLoadingFromFile = booleanValue;
+    }
+
+    public static ArrayList<Task> getTaskList() {
+        return taskList;
+    }
+
+
+    public static void addTodo(String taskDetails) {
         Task newTodo = new Todo(taskDetails);
         taskList.add(newTodo);
+
         if (!isLoadingFromFile) {
-            printDividerLine();
+            Ui.printDividerLine();
             System.out.println("Got it! I've added this todo: ");
             System.out.println(newTodo);
-            printDividerLine();
+            Ui.printDividerLine();
         }
     }
 
-    public static void addDeadline(String taskDetails, ArrayList<Task> taskList, Boolean isLoadingFromFile) throws MissingInformationException {
+    public static void addDeadline(String taskDetails) throws MissingInformationException {
         String[] deadlineDetails = taskDetails.split("/by", 2);
         if (deadlineDetails.length < 2) {
             throw new MissingInformationException("The deadline 'by' date/time was undetected!");
@@ -22,15 +38,16 @@ public class TaskHelper {
         String deadlineBy = deadlineDetails[1].trim();
         Task newDeadline = new Deadline(deadlineDescription, deadlineBy);
         taskList.add(newDeadline);
+
         if (!isLoadingFromFile) {
-            printDividerLine();
+            Ui.printDividerLine();
             System.out.println("Got it! I've added this deadline: ");
             System.out.println(newDeadline);
-            printDividerLine();
+            Ui.printDividerLine();
         }
     }
 
-    public static void addEvent(String taskDetails, ArrayList<Task> taskList, Boolean isLoadingFromFile) throws MissingInformationException{
+    public static void addEvent(String taskDetails) throws MissingInformationException{
         String[] eventDetails = taskDetails.split("/at", 2);
         if (eventDetails.length < 2) {
             throw new MissingInformationException("The event 'at' date/time was undetected!");
@@ -39,15 +56,16 @@ public class TaskHelper {
         String eventAt = eventDetails[1].trim();
         Task newEvent = new Event(eventDescription, eventAt);
         taskList.add(newEvent);
+
         if (!isLoadingFromFile) {
-            printDividerLine();
+            Ui.printDividerLine();
             System.out.println("Got it! I've added this event: ");
             System.out.println(newEvent);
-            printDividerLine();
+            Ui.printDividerLine();
         }
     }
 
-    public static void addTaskToList(String[] taskCommand, ArrayList<Task> taskList, Boolean isLoadingFromFile) throws MissingInformationException {
+    public static void addTaskToList(String[] taskCommand) throws MissingInformationException {
         if (taskCommand.length < 2) {
             throw new MissingInformationException("The details of a " + taskCommand[0] + " cannot be empty!");
         }
@@ -55,33 +73,33 @@ public class TaskHelper {
         String taskDetails = taskCommand[1];
         switch (taskType) {
         case "todo":
-            addTodo(taskDetails, taskList, isLoadingFromFile);
+            addTodo(taskDetails);
             break;
         case "deadline":
             try {
-                addDeadline(taskDetails, taskList, isLoadingFromFile);
+                addDeadline(taskDetails);
             } catch (MissingInformationException e) {
-                printExceptionMessage(e.toString());
+                Ui.printExceptionMessage(e.toString());
             }
             break;
         case "event":
             try {
-                addEvent(taskDetails, taskList, isLoadingFromFile);
+                addEvent(taskDetails);
             } catch (MissingInformationException e) {
-                printExceptionMessage(e.toString());
+                Ui.printExceptionMessage(e.toString());
             }
             break;
         }
         if (!isLoadingFromFile) {
-            printTaskNumberMessage();
-            printDividerLine();
+            Ui.printTaskNumberMessage();
+            Ui.printDividerLine();
         }
 
     }
 
-    public static void printTaskList(ArrayList<Task> taskList) {
+    public static void printTaskList() {
         int taskCount;
-        printDividerLine();
+        Ui.printDividerLine();
         if (Task.getNumberOfTasks() > 0) {
             System.out.println("Here are the tasks in your list:");
             for (taskCount = 0; taskCount < Task.getNumberOfTasks(); taskCount++) {
@@ -90,12 +108,11 @@ public class TaskHelper {
         } else {
             System.out.println("There are no tasks in your list!");
         }
-        printDividerLine();
-
+        Ui.printDividerLine();
     }
 
-    public static void setTaskAsDone(int taskNumber, ArrayList<Task> taskList) {
-        printDividerLine();
+    public static void setTaskAsDone(int taskNumber) {
+        Ui.printDividerLine();
         if (taskNumber <= Task.getNumberOfTasks() && taskNumber > 0) {
             Task currentTask = taskList.get(taskNumber - 1);
             currentTask.markAsDone();
@@ -104,12 +121,12 @@ public class TaskHelper {
         } else {
             System.out.println("Invalid task number to mark as done!");
         }
-        printDividerLine();
+        Ui.printDividerLine();
 
     }
 
-    public static void deleteTask(int taskNumber, ArrayList<Task> taskList) {
-        printDividerLine();
+    public static void deleteTask(int taskNumber) {
+        Ui.printDividerLine();
         if (taskNumber <= Task.getNumberOfTasks() && taskNumber > 0) {
             Task currentTask = taskList.get(taskNumber - 1);
             taskList.remove(taskNumber - 1);
@@ -119,53 +136,13 @@ public class TaskHelper {
         } else {
             System.out.println("Invalid task number to delete!");
         }
-        printTaskNumberMessage();
-        printDividerLine();
-    }
-
-    public static int getTaskNumberFromCommand(String command) {
-        int taskNumber;
-        String[] splitCommand = command.split(" ", 2);
-        taskNumber = Integer.parseInt(splitCommand[1]);
-        return taskNumber;
-    }
-
-    public static String[] splitTaskCommand(String command) {
-        String[] splitCommand = command.split(" ", 2);
-        return splitCommand;
-    }
-
-    public static void printInvalidCommand() {
-        printDividerLine();
-        System.out.println("Sorry, I could not understand your command!");
-        printDividerLine();
-    }
-
-    public static void printTaskNumberParseError() {
-        printDividerLine();
-        System.out.println("Unable to obtain task number!");
-        printDividerLine();
-    }
-
-    public static void printTaskNumberNotFound() {
-        printDividerLine();
-        System.out.println("No task number detected!");
-        printDividerLine();
-    }
-
-    public static void printTaskNumberMessage() {
-        System.out.println("Now you have " + Task.getNumberOfTasks() + " task(s) in your list!");
-    }
-
-    public static void printExceptionMessage(String exceptionMessage) {
-        printDividerLine();
-        System.out.println(exceptionMessage);
-        printDividerLine();
-    }
-
-    private static void printDividerLine() {
-        System.out.println("___________________________________ \n");
+        Ui.printTaskNumberMessage();
+        Ui.printDividerLine();
     }
 
 
+    public static void resetTaskList(ArrayList<Task> taskList) {
+        taskList.clear();
+        Task.resetNumberOfTasks();
+    }
 }
