@@ -2,54 +2,34 @@ import java.util.Scanner;
 
 public class Duke {
 
+    private Storage storage;
+    private TaskList tasks;
+    private Ui ui;
+
     public static void main(String[] args) {
         runDuke();
     }
 
+    public Duke() {
+        ui = new Ui();
+        storage = new Storage();
+        /*try {
+            tasks = new TaskList(storage.load());
+        } catch (DukeException e) {
+            ui.showLoadingError();
+            tasks = new TaskList();
+        }*/
+    }
+
     public static void runDuke(){
-        Scanner userResponseScanner = new Scanner(System.in);
-        String command;
         boolean isQuittingLoop = false;
         TaskList taskList = new TaskList();
         Storage.loadDukeMemory();
+        //ui = new Ui();
         Ui.printWelcome();
 
-        // move this to 'parser.java'
         while (!isQuittingLoop) {
-            command = userResponseScanner.nextLine().trim();
-
-            if (command.equals("bye")) {
-                isQuittingLoop = true;
-            } else if (command.equals("list")) {
-                TaskList.printTaskList();
-            } else if (command.startsWith("done")) {
-                try {
-                    int taskNumber = Parser.getTaskNumberFromCommand(command);
-                    TaskList.setTaskAsDone(taskNumber);
-                } catch (NumberFormatException e) {
-                    Ui.printTaskNumberParseError();
-                } catch (IndexOutOfBoundsException e) {
-                    Ui.printTaskNumberNotFound();
-                }
-            } else if (command.startsWith("todo") || command.startsWith("deadline") || command.startsWith("event")) {
-                try {
-                    String[] taskCommand = Parser.splitTaskCommand(command);
-                    TaskList.addTaskToList(taskCommand);
-                } catch (DukeException e) {
-                    Ui.printExceptionMessage(e.toString());
-                }
-            } else if (command.startsWith("delete")) {
-                try {
-                    int taskNumber = Parser.getTaskNumberFromCommand(command);
-                    TaskList.deleteTask(taskNumber);
-                } catch (NumberFormatException e) {
-                    Ui.printTaskNumberParseError();
-                } catch (IndexOutOfBoundsException e) {
-                    Ui.printTaskNumberNotFound();
-                }
-            } else {
-                Ui.printInvalidCommand();
-            }
+            isQuittingLoop = Parser.getUserCommand();
         }
 
         Storage.saveDukeMemory("data/dukeMemory.txt");

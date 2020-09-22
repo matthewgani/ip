@@ -1,4 +1,6 @@
 public class Ui {
+
+
     public static void printFileScannerIOError() {
         printDividerLine();
         System.out.println("Unable to find dukeMemory file!");

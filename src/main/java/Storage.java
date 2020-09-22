@@ -113,12 +113,12 @@ public class Storage {
             String[] splitTaskData = taskData.split("\\|");
             String taskType = splitTaskData[0].trim();
 
-            if(!splitTaskData[1].trim().equals("true") || !splitTaskData[1].trim().equals("false")) {
+            if(!splitTaskData[1].trim().equals("true") && !splitTaskData[1].trim().equals("false")) {
                 throw new CorruptedFileException("Unable to load the file as it was corrupted!");
             }
 
             Boolean taskDoneStatus = Boolean.parseBoolean(splitTaskData[1].trim());
-            
+
             switch (taskType) {
             case "todo":
                 taskDetails[0] = taskType;
