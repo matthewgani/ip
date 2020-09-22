@@ -2,10 +2,10 @@ import java.util.ArrayList;
 
 public class TaskHelper {
 
-    public static void addTodo(String taskDetails, ArrayList<Task> taskList, Boolean loadingFromFile) {
+    public static void addTodo(String taskDetails, ArrayList<Task> taskList, Boolean isLoadingFromFile) {
         Task newTodo = new Todo(taskDetails);
         taskList.add(newTodo);
-        if (!loadingFromFile) {
+        if (!isLoadingFromFile) {
             printDividerLine();
             System.out.println("Got it! I've added this todo: ");
             System.out.println(newTodo);
@@ -13,7 +13,7 @@ public class TaskHelper {
         }
     }
 
-    public static void addDeadline(String taskDetails, ArrayList<Task> taskList, Boolean loadingFromFile) throws MissingInformationException {
+    public static void addDeadline(String taskDetails, ArrayList<Task> taskList, Boolean isLoadingFromFile) throws MissingInformationException {
         String[] deadlineDetails = taskDetails.split("/by", 2);
         if (deadlineDetails.length < 2) {
             throw new MissingInformationException("The deadline 'by' date/time was undetected!");
@@ -22,7 +22,7 @@ public class TaskHelper {
         String deadlineBy = deadlineDetails[1].trim();
         Task newDeadline = new Deadline(deadlineDescription, deadlineBy);
         taskList.add(newDeadline);
-        if (!loadingFromFile) {
+        if (!isLoadingFromFile) {
             printDividerLine();
             System.out.println("Got it! I've added this deadline: ");
             System.out.println(newDeadline);
@@ -30,7 +30,7 @@ public class TaskHelper {
         }
     }
 
-    public static void addEvent(String taskDetails, ArrayList<Task> taskList, Boolean loadingFromFile) throws MissingInformationException{
+    public static void addEvent(String taskDetails, ArrayList<Task> taskList, Boolean isLoadingFromFile) throws MissingInformationException{
         String[] eventDetails = taskDetails.split("/at", 2);
         if (eventDetails.length < 2) {
             throw new MissingInformationException("The event 'at' date/time was undetected!");
@@ -39,7 +39,7 @@ public class TaskHelper {
         String eventAt = eventDetails[1].trim();
         Task newEvent = new Event(eventDescription, eventAt);
         taskList.add(newEvent);
-        if (!loadingFromFile) {
+        if (!isLoadingFromFile) {
             printDividerLine();
             System.out.println("Got it! I've added this event: ");
             System.out.println(newEvent);
@@ -47,7 +47,7 @@ public class TaskHelper {
         }
     }
 
-    public static void addTaskToList(String[] taskCommand, ArrayList<Task> taskList, Boolean loadingFromFile) throws MissingInformationException {
+    public static void addTaskToList(String[] taskCommand, ArrayList<Task> taskList, Boolean isLoadingFromFile) throws MissingInformationException {
         if (taskCommand.length < 2) {
             throw new MissingInformationException("The details of a " + taskCommand[0] + " cannot be empty!");
         }
@@ -55,24 +55,24 @@ public class TaskHelper {
         String taskDetails = taskCommand[1];
         switch (taskType) {
         case "todo":
-            addTodo(taskDetails, taskList, loadingFromFile);
+            addTodo(taskDetails, taskList, isLoadingFromFile);
             break;
         case "deadline":
             try {
-                addDeadline(taskDetails, taskList, loadingFromFile);
+                addDeadline(taskDetails, taskList, isLoadingFromFile);
             } catch (MissingInformationException e) {
                 printExceptionMessage(e.toString());
             }
             break;
         case "event":
             try {
-                addEvent(taskDetails, taskList, loadingFromFile);
+                addEvent(taskDetails, taskList, isLoadingFromFile);
             } catch (MissingInformationException e) {
                 printExceptionMessage(e.toString());
             }
             break;
         }
-        if (!loadingFromFile) {
+        if (!isLoadingFromFile) {
             printTaskNumberMessage();
             printDividerLine();
         }
@@ -129,8 +129,6 @@ public class TaskHelper {
         taskNumber = Integer.parseInt(splitCommand[1]);
         return taskNumber;
     }
-
-
 
     public static String[] splitTaskCommand(String command) {
         String[] splitCommand = command.split(" ", 2);

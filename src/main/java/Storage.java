@@ -18,8 +18,8 @@ public class FileHelper {
         manageDukeMemory();
 
         try {
-            File f = new File("data/dukeMemory.txt"); // create a File for the given file path
-            Scanner fileScanner = new Scanner(f); // create a Scanner using the File as the source
+            File f = new File("data/dukeMemory.txt");
+            Scanner fileScanner = new Scanner(f);
             while (fileScanner.hasNext()) {
                 fileData.add(fileScanner.nextLine());
             }
