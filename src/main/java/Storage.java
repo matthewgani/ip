@@ -81,6 +81,7 @@ public class Storage {
         String fileWriteFormat = new String();
         Boolean taskDoneStatus = currentTask.getDoneStatus();
         String doneStatusString;
+        System.out.println("taskdonestatus is :" + taskDoneStatus);
         if (taskDoneStatus) {
             doneStatusString = "1";
         } else {
@@ -89,15 +90,15 @@ public class Storage {
 
         switch (currentTask.getTaskType()) {
         case "todo" :
-            fileWriteFormat = "todo" + " | " + doneStatusString + " | " + currentTask.getDescription();
+            fileWriteFormat = "todo" + " | " + taskDoneStatus + " | " + currentTask.getDescription();
             break;
         case "deadline":
             Deadline currentDeadline = (Deadline) currentTask;
-            fileWriteFormat = "deadline" + " | " + doneStatusString + " | " + currentTask.getDescription() + " | " + currentDeadline.getBy();
+            fileWriteFormat = "deadline" + " | " + taskDoneStatus + " | " + currentTask.getDescription() + " | " + currentDeadline.getBy();
             break;
         case "event":
             Event currentEvent = (Event) currentTask;
-            fileWriteFormat = "event" + " | " + doneStatusString + " | " + currentTask.getDescription() + " | " + currentEvent.getAt();
+            fileWriteFormat = "event" + " | " + taskDoneStatus + " | " + currentTask.getDescription() + " | " + currentEvent.getAt();
             break;
         }
 
@@ -108,21 +109,16 @@ public class Storage {
 
     public static void convertFileToTaskList(ArrayList<String> fileData) throws ArrayIndexOutOfBoundsException, CorruptedFileException {
         for (String taskData : fileData) {
-            Boolean taskDoneStatus;
-            int taskDoneInt;
             String[] taskDetails = new String[5];
             String[] splitTaskData = taskData.split("\\|");
             String taskType = splitTaskData[0].trim();
-            taskDoneInt = Integer.parseInt(splitTaskData[1].trim());
 
-            if (taskDoneInt > 1) {
+            if(!splitTaskData[1].trim().equals("true") || !splitTaskData[1].trim().equals("false")) {
                 throw new CorruptedFileException("Unable to load the file as it was corrupted!");
-            } else if (taskDoneInt == 1) {
-                taskDoneStatus = true;
-            } else {
-                taskDoneStatus = false;
             }
 
+            Boolean taskDoneStatus = Boolean.parseBoolean(splitTaskData[1].trim());
+            
             switch (taskType) {
             case "todo":
                 taskDetails[0] = taskType;
