@@ -1,40 +1,30 @@
-import java.util.Scanner;
-
 public class Duke {
 
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
+    private Parser parser;
 
     public static void main(String[] args) {
-        runDuke();
+        new Duke().run();
     }
 
     public Duke() {
         ui = new Ui();
+        tasks = new TaskList();
         storage = new Storage();
-        /*try {
-            tasks = new TaskList(storage.load());
-        } catch (DukeException e) {
-            ui.showLoadingError();
-            tasks = new TaskList();
-        }*/
+        parser = new Parser(tasks);
+        storage.loadDukeMemory("data/dukeMemory.txt", tasks);
     }
 
-    public static void runDuke(){
+    public void run(){
         boolean isQuittingLoop = false;
-        TaskList taskList = new TaskList();
-        Storage.loadDukeMemory();
-        //ui = new Ui();
-        Ui.printWelcome();
-
+        ui.printWelcome();
         while (!isQuittingLoop) {
-            isQuittingLoop = Parser.getUserCommand();
+            isQuittingLoop = parser.getUserCommand();
         }
-
-        Storage.saveDukeMemory("data/dukeMemory.txt");
-        Ui.printGoodbye();
-
+        storage.saveDukeMemory("data/dukeMemory.txt", tasks);
+        ui.printGoodbye();
     }
 
 }

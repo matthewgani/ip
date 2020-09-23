@@ -9,8 +9,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
+    private Ui ui;
 
-    public static void retrieveData() {
+    public Storage() {
+        ui = new Ui();
+    }
+
+    public void loadDukeMemory(String pathname, TaskList tasks) {
+        ui.printDividerLine();
+        tasks.setIsLoadingFromFile(true);
+        retrieveData(pathname, tasks);
+        ui.printTaskNumberMessage();
+        tasks.setIsLoadingFromFile(false);
+    }
+
+    public void retrieveData(String pathname, TaskList tasks) {
         ArrayList<String> fileData = new ArrayList<>();
         ArrayList<Task> taskList = new ArrayList<>();
 
@@ -18,27 +31,27 @@ public class Storage {
         manageDukeMemory();
 
         try {
-            File f = new File("data/dukeMemory.txt");
+            File f = new File(pathname);
             Scanner fileScanner = new Scanner(f);
             while (fileScanner.hasNext()) {
                 fileData.add(fileScanner.nextLine());
             }
-            convertFileToTaskList(fileData);
+            convertFileToTaskList(fileData, tasks);
 
         } catch (IOException e) {
-            Ui.printFileScannerIOError();
-            TaskList.resetTaskList(taskList);
+            ui.printFileScannerIOError();
+            tasks.resetTaskList(taskList);
         } catch (ArrayIndexOutOfBoundsException e) {
-            Ui.printReadError();
-            TaskList.resetTaskList(taskList);
+            ui.printReadError();
+            tasks.resetTaskList(taskList);
         } catch (DukeException e) {
-            Ui.printExceptionMessage(e.toString());
-            TaskList.resetTaskList(taskList);
+            ui.printExceptionMessage(e.toString());
+            tasks.resetTaskList(taskList);
         }
 
     }
 
-    public static void manageDataDirectory() {
+    public void manageDataDirectory() {
         try {
             Path directoryPath = Paths.get("data");
             Files.createDirectory(directoryPath);
@@ -50,7 +63,7 @@ public class Storage {
         }
     }
 
-    public static void manageDukeMemory() {
+    public void manageDukeMemory() {
         try {
             Path dukeMemoryPath = Paths.get("data/dukeMemory.txt");
             Files.createFile(dukeMemoryPath);
@@ -62,9 +75,9 @@ public class Storage {
         }
     }
 
-    public static void saveDukeMemory(String filePath) {
+    public void saveDukeMemory(String filePath, TaskList tasks) {
         try {
-            ArrayList<Task> taskList = TaskList.getTaskList();
+            ArrayList<Task> taskList = tasks.getTaskList();
             FileWriter fw = new FileWriter(filePath);
             for (Task task : taskList) {
                 fw.write(formatTaskForFileWrite(task));
@@ -73,20 +86,15 @@ public class Storage {
             fw.close();
         } catch (IOException e) {
             System.out.println("IO exception when creating file from taskList");
+        } catch(IllegalStateException e) {
+            System.out.println("Error while writing to file!");
         }
 
     }
 
-    public static String formatTaskForFileWrite(Task currentTask) {
-        String fileWriteFormat = new String();
+    public String formatTaskForFileWrite(Task currentTask) {
+        String fileWriteFormat;
         Boolean taskDoneStatus = currentTask.getDoneStatus();
-        String doneStatusString;
-        System.out.println("taskdonestatus is :" + taskDoneStatus);
-        if (taskDoneStatus) {
-            doneStatusString = "1";
-        } else {
-            doneStatusString = "0";
-        }
 
         switch (currentTask.getTaskType()) {
         case "todo" :
@@ -100,6 +108,8 @@ public class Storage {
             Event currentEvent = (Event) currentTask;
             fileWriteFormat = "event" + " | " + taskDoneStatus + " | " + currentTask.getDescription() + " | " + currentEvent.getAt();
             break;
+        default:
+            throw new IllegalStateException("Unexpected value: " + currentTask.getTaskType());
         }
 
         return fileWriteFormat;
@@ -107,7 +117,7 @@ public class Storage {
     }
 
 
-    public static void convertFileToTaskList(ArrayList<String> fileData) throws ArrayIndexOutOfBoundsException, CorruptedFileException {
+    public void convertFileToTaskList(ArrayList<String> fileData, TaskList tasks) throws ArrayIndexOutOfBoundsException, CorruptedFileException {
         for (String taskData : fileData) {
             String[] taskDetails = new String[5];
             String[] splitTaskData = taskData.split("\\|");
@@ -117,7 +127,7 @@ public class Storage {
                 throw new CorruptedFileException("Unable to load the file as it was corrupted!");
             }
 
-            Boolean taskDoneStatus = Boolean.parseBoolean(splitTaskData[1].trim());
+            boolean taskDoneStatus = Boolean.parseBoolean(splitTaskData[1].trim());
 
             switch (taskType) {
             case "todo":
@@ -137,22 +147,15 @@ public class Storage {
             }
 
             try {
-                TaskList.addTaskToList(taskDetails);
+                tasks.addTaskToList(taskDetails);
                 if (taskDoneStatus) {
-                    TaskList.getTaskList().get(Task.getNumberOfTasks() - 1).markAsDone();
+                    tasks.getTaskList().get(Task.getNumberOfTasks() - 1).markAsDone();
                 }
             } catch (DukeException e) {
-                Ui.printExceptionMessage(e.toString());
+                ui.printExceptionMessage(e.toString());
             }
         }
     }
 
 
-    public static void loadDukeMemory() {
-        Ui.printDividerLine();
-        TaskList.setIsLoadingFromFile(true);
-        Storage.retrieveData();
-        Ui.printTaskNumberMessage();
-        TaskList.setIsLoadingFromFile(false);
-    }
 }
