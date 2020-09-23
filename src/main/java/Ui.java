@@ -64,4 +64,10 @@ public class Ui {
         System.out.println("Bye. Hope to see you again soon! :)");
         printDividerLine();
     }
+
+    public void printKeywordMissingError() {
+        printDividerLine();
+        System.out.println("There was no keyword input after the find command!");
+        printDividerLine();
+    }
 }

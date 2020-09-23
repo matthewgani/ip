@@ -7,7 +7,6 @@ public class Parser {
     public Parser(TaskList taskList) {
         this.taskList = taskList;
         ui = new Ui();
-
     }
 
     public int getTaskNumberFromCommand(String command) {
@@ -41,8 +40,8 @@ public class Parser {
             }
         } else if (command.startsWith("todo") || command.startsWith("deadline") || command.startsWith("event")) {
             try {
-                String[] taskCommand = splitTaskCommand(command);
-                taskList.addTaskToList(taskCommand);
+                String[] taskCommands = splitTaskCommand(command);
+                taskList.addTaskToList(taskCommands);
             } catch (DukeException e) {
                 ui.printExceptionMessage(e.toString());
             }
@@ -54,6 +53,13 @@ public class Parser {
                 ui.printTaskNumberParseError();
             } catch (IndexOutOfBoundsException e) {
                 ui.printTaskNumberNotFound();
+            }
+        } else if (command.startsWith("find")) {
+            try {
+                String[] taskCommands = splitTaskCommand(command);
+                taskList.findTasks(taskCommands[1]);
+            } catch (IndexOutOfBoundsException e) {
+                ui.printKeywordMissingError();
             }
         } else {
             ui.printInvalidCommand();
