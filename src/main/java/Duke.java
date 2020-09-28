@@ -6,15 +6,15 @@ public class Duke {
     private Parser parser;
 
     public static void main(String[] args) {
-        new Duke().run();
+        new Duke("data/dukeMemory.txt").run();
     }
 
-    public Duke() {
+    public Duke(String filepath) {
         ui = new Ui();
         tasks = new TaskList();
         storage = new Storage();
         parser = new Parser(tasks);
-        storage.loadDukeMemory("data/dukeMemory.txt", tasks);
+        storage.loadDukeMemory(filepath, tasks);
     }
 
     public void run(){
