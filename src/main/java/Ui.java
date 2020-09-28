@@ -98,6 +98,7 @@ public class Ui {
         printDividerLine();
     }
 
+
     /**
      * Prints the ArrayList of tasks.
      *
@@ -114,6 +115,12 @@ public class Ui {
         } else {
             System.out.println("There are no tasks in your list!");
         }
+    }
+
+    public void printKeywordMissingError() {
+        printDividerLine();
+        System.out.println("There was no keyword input after the find command!");
         printDividerLine();
     }
 }
+
