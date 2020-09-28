@@ -10,6 +10,12 @@ public class Parser {
 
     }
 
+    /**
+     * Returns a task number that is parsed from a command that is supposed to have a task number following it.
+     *
+     * @param command The full string of command entered by user.
+     * @return task number.
+     */
     public int getTaskNumberFromCommand(String command) {
         int taskNumber;
         String[] splitCommand = command.split(" ", 2);
@@ -17,11 +23,23 @@ public class Parser {
         return taskNumber;
     }
 
+    /**
+     * Returns an array of strings where the command entered i split into 2.
+     *
+     * @param command The full string of the command entered by the user.
+     * @return An array of 2 strings, split after the first space bar.
+     */
     public String[] splitTaskCommand(String command) {
         String[] splitCommand = command.split(" ", 2);
         return splitCommand;
     }
 
+    /**
+     * Returns whether or not Duke should continue to accept the User's commands.
+     * It is used to make sense of what the user enters and tells Duke which command to do.
+     *
+     * @return A boolean for whether or not Duke should stop running, true means stop running.
+     */
     public Boolean getUserCommand() {
         Scanner userResponseScanner = new Scanner(System.in);
         String command = userResponseScanner.nextLine().trim();
@@ -29,7 +47,7 @@ public class Parser {
         if (command.equals("bye")) {
             return true;
         } else if (command.equals("list")) {
-            taskList.printTaskList();
+            ui.printTaskList(taskList.getTaskList());
         } else if (command.startsWith("done")) {
             try {
                 int taskNumber = getTaskNumberFromCommand(command);
