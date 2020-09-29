@@ -1,4 +1,5 @@
 # Duke User Guide
+Duke is a command line app that allows you to manage and save your tasks quickly and simply!
 
 ## Setting up in Intellij
 
@@ -22,6 +23,11 @@ Prerequisites: JDK 11, update Intellij to the most recent version.
    | |_| | |_| |   <  __/
    |____/ \__,_|_|\_\___|
    ```
+## Using Duke on Command Line
+1. Navigate to where you downloaded the JAR file from Github.
+2. Type 'chcp 65001'
+3. Type 'java -Dfile.encoding=UTF-8 -jar IP.jar'
+4. If ticks and crosses are shown as a question mark, right click the top bar of the command line and go to 'properties' and then 'font'. Change the font to a supported font like NSimSun.
 
 # Features 
 

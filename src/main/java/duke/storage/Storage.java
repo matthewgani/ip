@@ -30,7 +30,7 @@ public class Storage {
      * Calls retrieveData.
      *
      * @param pathname String that has the pathname for the data to be retrieved.
-     * @param tasks data.TaskList class used when changing isLoadingFromFile.
+     * @param tasks TaskList class used when changing isLoadingFromFile.
      */
     public void loadDukeMemory(String pathname, TaskList tasks) {
         ui.printDividerLine();
@@ -44,7 +44,7 @@ public class Storage {
      * Retrieves the data from the text file and updates the task list in TaskList.
      *
      * @param pathname String that has the pathname for the data to be retrieved.
-     * @param tasks data.TaskList class that is used to populate the task list in TaskList.
+     * @param tasks TaskList class that is used to populate the task list in TaskList.
      */
     public void retrieveData(String pathname, TaskList tasks) {
         ArrayList<String> fileData = new ArrayList<>();
@@ -108,7 +108,7 @@ public class Storage {
      * Overwrites the dukeMemory text file with the current task list.
      *
      * @param filePath String that has the file path to the text file to write to.
-     * @param tasks data.TaskList class used to access the current task list.
+     * @param tasks TaskList class used to access the current task list.
      */
     public void saveDukeMemory(String filePath, TaskList tasks) {
         try {
