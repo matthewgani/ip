@@ -13,7 +13,7 @@ Prerequisites: JDK 11, update Intellij to the most recent version.
    1. Click `Open or Import`.
    1. Select the project directory, and click `OK`
    1. If there are any further prompts, accept the defaults.
-1. After the importing is complete, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()`. If the setup is correct, you should see something like the below:
+1. After the importing is complete, locate the `src/main/java/duke/Duke.java` file, right-click it, and choose `Run Duke.main()`. If the setup is correct, you should see something like the below:
    ```
    Hello! I'm Duke!
     ____        _        
@@ -166,19 +166,22 @@ Format: `bye`
 
 Output: 
 ````
+___________________________________ 
+
 Bye. Hope to see you again soon! :)
+___________________________________ 
 ````
 
 # Summary of Commands
 
 Commands | Purpose | Format
 -------|---------|-------------
-todo | Adds a todo task | todo [description] 
-event | Adds an event task | event [description] /at [timing/date]
-deadline | Adds a deadline task | deadline [description] /by [timing/date] 
-done | Sets a task as done | done [task number]
-list | Prints the task list | list
-delete | Deletes a task | delete [task number]
-find | Finds a keyword in the task list | find [keyword]
-bye | Exits program | bye
+todo | Adds a todo task | `todo [description]`
+event | Adds an event task | `event [description] /at [timing/date]`
+deadline | Adds a deadline task | `deadline [description] /by [timing/date]`
+done | Sets a task as done | `done [task number]`
+list | Prints the task list | `list`
+delete | Deletes a task | `delete [task number]`
+find | Finds a keyword in the task list | `find [keyword]`
+bye | Exits program | `bye`
 

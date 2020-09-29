@@ -1,3 +1,8 @@
+package duke.task;
+
+import duke.exception.MissingInformationException;
+import duke.ui.Ui;
+
 import java.util.ArrayList;
 
 public class TaskList {
@@ -31,7 +36,7 @@ public class TaskList {
     /**
      * Adds a Todo type of task into the taskList
      *
-     * @param taskDetails String input including Todo Description.
+     * @param taskDetails String input including data.Todo Description.
      */
     public void addTodo(String taskDetails) {
         Task newTodo = new Todo(taskDetails);
@@ -48,7 +53,7 @@ public class TaskList {
     /**
      * Adds a Deadline type of task into the taskList
      *
-     * @param taskDetails String input including Deadline description and by.
+     * @param taskDetails String input including data.Deadline description and by.
      * @throws MissingInformationException If the user did not enter '/by' in a deadline command.
      */
     public void addDeadline(String taskDetails) throws MissingInformationException {
@@ -72,7 +77,7 @@ public class TaskList {
     /**
      * Adds a Event type of task into the taskList
      *
-     * @param taskDetails String input including Event description and at.
+     * @param taskDetails String input including data.Event description and at.
      * @throws MissingInformationException If the user did not enter '/at' in an event command.
      */
     public void addEvent(String taskDetails) throws MissingInformationException{
@@ -134,7 +139,7 @@ public class TaskList {
     /**
      * Sets a task as done.
      *
-     * @param taskNumber Task number to be set as done.
+     * @param taskNumber data.Task number to be set as done.
      */
     public void setTaskAsDone(int taskNumber) {
         ui.printDividerLine();
@@ -153,7 +158,7 @@ public class TaskList {
     /**
      * Deletes a task from the taskList.
      *
-     * @param taskNumber Task number to be deleted.
+     * @param taskNumber data.Task number to be deleted.
      */
     public void deleteTask(int taskNumber) {
         ui.printDividerLine();

@@ -1,3 +1,10 @@
+package duke.parser;
+
+import duke.exception.DukeException;
+import duke.task.TaskList;
+import duke.ui.Ui;
+
+
 import java.util.Scanner;
 
 public class Parser {

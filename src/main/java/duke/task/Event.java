@@ -1,3 +1,5 @@
+package duke.task;
+
 public class Event extends Task {
 
     private String at;
@@ -24,9 +26,9 @@ public class Event extends Task {
     }
 
     /**
-     * Returns a formatted String that shows the task is an Event and its description and at timing.
+     * Returns a formatted String that shows the task is an data.Event and its description and at timing.
      *
-     * @return formatted String that shows the task is an Event, contains description and at timing.
+     * @return formatted String that shows the task is an data.Event, contains description and at timing.
      */
     @Override
     public String toString() {

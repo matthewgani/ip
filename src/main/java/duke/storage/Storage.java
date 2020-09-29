@@ -1,3 +1,13 @@
+package duke.storage;
+
+import duke.task.Deadline;
+import duke.task.Task;
+import duke.task.TaskList;
+import duke.task.Event;
+import duke.exception.CorruptedFileException;
+import duke.exception.DukeException;
+import duke.ui.Ui;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,7 +30,7 @@ public class Storage {
      * Calls retrieveData.
      *
      * @param pathname String that has the pathname for the data to be retrieved.
-     * @param tasks TaskList class used when changing isLoadingFromFile.
+     * @param tasks data.TaskList class used when changing isLoadingFromFile.
      */
     public void loadDukeMemory(String pathname, TaskList tasks) {
         ui.printDividerLine();
@@ -34,7 +44,7 @@ public class Storage {
      * Retrieves the data from the text file and updates the task list in TaskList.
      *
      * @param pathname String that has the pathname for the data to be retrieved.
-     * @param tasks TaskList class that is used to populate the task list in TaskList.
+     * @param tasks data.TaskList class that is used to populate the task list in TaskList.
      */
     public void retrieveData(String pathname, TaskList tasks) {
         ArrayList<String> fileData = new ArrayList<>();
@@ -98,7 +108,7 @@ public class Storage {
      * Overwrites the dukeMemory text file with the current task list.
      *
      * @param filePath String that has the file path to the text file to write to.
-     * @param tasks TaskList class used to access the current task list.
+     * @param tasks data.TaskList class used to access the current task list.
      */
     public void saveDukeMemory(String filePath, TaskList tasks) {
         try {
