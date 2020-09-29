@@ -76,7 +76,7 @@ public class Ui {
      * Prints the welcome message.
      */
     public void printWelcome() {
-        String logo = " ____        _        \n"
+        String logo = "____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
                 + "| | | | | | | |/ / _ \\\n"
                 + "| |_| | |_| |   <  __/\n"
@@ -115,6 +115,7 @@ public class Ui {
         } else {
             System.out.println("There are no tasks in your list!");
         }
+        printDividerLine();
     }
 
     public void printKeywordMissingError() {
