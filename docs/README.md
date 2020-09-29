@@ -174,7 +174,7 @@ ___________________________________
 
 # Summary of Commands
 
-Commands | Purpose | Format
+Command | Purpose | Format
 -------|---------|-------------
 todo | Adds a todo task | `todo [description]`
 event | Adds an event task | `event [description] /at [timing/date]`
