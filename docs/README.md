@@ -23,7 +23,7 @@ Prerequisites: JDK 11, update Intellij to the most recent version.
    | |_| | |_| |   <  __/
    |____/ \__,_|_|\_\___|
    ```
-## Using Duke on Command Line
+# Using Duke on Command Line
 1. Navigate to where you downloaded the JAR file from Github.
 2. Type 'chcp 65001'
 3. Type 'java -Dfile.encoding=UTF-8 -jar IP.jar'
